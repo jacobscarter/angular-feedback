@@ -19,6 +19,12 @@ This directive was built using [ivoviz's](http://github.com/ivoviz) feedback rep
 
 ## Use
 
+Add as a dependency to your application:
+
+`angular.module('myApp', ['angular-send-feedback']);`
+
+Add directive to your HTML:
+
 `<angular-feedback options="options"></angular-feedback>`
 
 The options attribute is connected to a `$scope` value in your controller, you can use this object to change/modify any of the options listed below.

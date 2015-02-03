@@ -1,6 +1,6 @@
 /**
- * A feedback directive similar to Google Feedback
- * @version v1.0.0 - 2015-02-03 * @link https://github.com/jacobscarter/angular-feedback
+ * Angular feedback directive similar to Google Feedback
+ * @version v1.0.1 - 2015-02-03 * @link https://github.com/jacobscarter/angular-feedback
  * @author Jacob Carter <jacob@ieksolutions.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -27,10 +27,6 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
           //return attributes.template || "angularsendfeedback.html";
         //},
         link: function($scope, $element, $attrs) {
-
-            $sope.options = {
-                html2canvasURL : 'vendors/html2canvas/build/html2canvas.js'
-            };
 
             (function($){
 

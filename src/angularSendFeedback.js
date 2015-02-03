@@ -13,10 +13,6 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
         //},
         link: function($scope, $element, $attrs) {
 
-            $sope.options = {
-                html2canvasURL : 'vendors/html2canvas/build/html2canvas.js'
-            };
-
             (function($){
 
                 $.feedback = function(options) {

@@ -4,6 +4,10 @@ Feedback directive similar to Google Feedback
 
 This directive was built using [ivoviz's](http://github.com/ivoviz) feedback repo.
 
+## Demo
+
+[http://jacobscarter.github.io/angular-feedback/](http://jacobscarter.github.io/angular-feedback/)
+
 ## Install
 
 `bower install angular-send-feedback`

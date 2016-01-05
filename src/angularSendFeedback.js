@@ -47,14 +47,18 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                             onClose:                function() {},
                             screenshotStroke:       true,
                             highlightElement:       true,
-                            initialBox:             false
+                            initialBox:             false,
+                            visibleOnSmallScreen:   true
                     }, options);
                         var supportedBrowser = !!window.HTMLCanvasElement;
                         var isFeedbackButtonNative = settings.feedbackButton == '.feedback-btn';
                         var _html2canvas = false;
                         if (supportedBrowser) {
                             if(isFeedbackButtonNative) {
-                                $('body').append('<button class="feedback-btn feedback-btn-gray">' + settings.initButtonText + '</button>');
+                                    if(settings.visibleOnSmallScreen)
+                                        $('body').append('<button class="feedback-btn feedback-btn-gray">' + settings.initButtonText + '</button>');
+                                    else
+                                        $('body').append('<button class="feedback-btn feedback-btn-gray hidden-xs">' + settings.initButtonText + '</button>');
                             }
                             $(document).on('click', settings.feedbackButton, function(){
                                 if(isFeedbackButtonNative) {

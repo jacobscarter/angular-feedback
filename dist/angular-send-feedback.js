@@ -1,6 +1,6 @@
 /**
  * Angular feedback directive similar to Google Feedback
- * @version v1.0.1 - 2015-02-03 * @link https://github.com/jacobscarter/angular-feedback
+ * @version v1.0.2 - 2016-01-29 * @link https://github.com/jacobscarter/angular-feedback
  * @author Jacob Carter <jacob@ieksolutions.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -539,7 +539,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                         post.note = $('#feedback-note').val();
                                         var data = {feedback: JSON.stringify(post)};
                                         $.ajax({
-                                            url: settings.ajaxURL,
+                                            url: typeof settings.ajaxURL === 'function' ? settings.ajaxURL() : settings.ajaxURL,
                                             dataType: 'json',
                                             type: 'POST',
                                             data: data,

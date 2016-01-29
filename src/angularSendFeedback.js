@@ -524,7 +524,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                         post.note = $('#feedback-note').val();
                                         var data = {feedback: JSON.stringify(post)};
                                         $.ajax({
-                                            url: settings.ajaxURL,
+                                            url: typeof settings.ajaxURL === 'function' ? settings.ajaxURL() : settings.ajaxURL,
                                             dataType: 'json',
                                             type: 'POST',
                                             data: data,

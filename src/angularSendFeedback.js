@@ -526,7 +526,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                         $.ajax({
                                             url: settings.ajaxURL,
                                             dataType: 'json',
-                                            contentType: 'application/json'
+                                            contentType: 'application/json',
                                             type: 'POST',
                                             data: data,
                                             success: function() {

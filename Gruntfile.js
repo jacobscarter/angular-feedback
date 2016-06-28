@@ -66,6 +66,17 @@ module.exports = function(grunt) {
             flatten: true
           }
        ]   
+      },
+      icons: {
+        files: [
+          {
+            src: ['src/icons.png'],
+            dest: '<%= dirs.dest %>',
+            cwd: '.',
+            expand: true,
+            flatten: true
+          }
+        ]
       }
     },
     bowerInstall: {

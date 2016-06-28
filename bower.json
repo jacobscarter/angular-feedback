@@ -1,0 +1,15 @@
+{
+  "name": "angular-feedback-demo",
+  "description": "A feedback directive similar to Google Feedback",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jacobscarter/angular-feedback.git"
+  },
+  "dependencies": {
+    "angular": "*",
+    "ui-router": "*",
+    "angular-send-feedback" : "*",
+    "jquery" : "*",
+    "html2canvas" : "*"
+  }
+}

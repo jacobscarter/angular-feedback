@@ -38,6 +38,36 @@ The information from the client will be sent through ajax post request. The info
 * `post.note` - Description of the feedback.
 * `post.img` - The screenshot of the feedback. - **base64 encoded data URI!**
 * `post.html` - The structure of the page.
+* `post.timestamp` - Timestamp create when request is sent.
+
+Sample Request Body
+```
+{
+    "feedback": {
+        "browser": {
+            "appCodeName": "Mozilla",
+            "appName": "Netscape",
+            "appVersion": "5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36",
+            "cookieEnabled": true,
+            "onLine": true,
+            "platform": "Win32",
+            "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36",
+            "plugins": [
+                "Shockwave Flash",
+                "Widevine Content Decryption Module",
+                "Chrome PDF Viewer",
+                "Native Client",
+                "Chrome PDF Viewer"
+            ]
+        },
+        "html": "<html>...</html>"
+        "url": "http://localhost:3000/",
+        "timestamp": 1467129480643,
+        "img": "data:image/png;base64,...",
+        "note": "test"
+    }
+}
+```
 
 ## Options
 
@@ -46,6 +76,12 @@ The information from the client will be sent through ajax post request. The info
 The URL where the plugin will post the screenshot and additional informations. (JSON datatype)
 
 `Default: ''`
+
+### postTimeStamp (Boolean)
+
+Whether you want a timestamp sent in the form of number of milliseconds since 1 January 1970 00:00:00 UTC.
+
+`Default: true`
 
 ### postBrowserInfo (Boolean)
 
@@ -179,3 +215,7 @@ A callback function to be called when clicking on take screenshot button. The ca
 Sets whether the user will be able to drag the feedback options modal or not
 
 `Default: true`
+
+## //TODO List
+
+* Pulling jQuery out into a more classical AngularJS Directive rather than just wrapping the jQuery plugin.

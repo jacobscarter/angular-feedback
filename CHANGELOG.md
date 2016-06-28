@@ -1,3 +1,12 @@
+<a name="1.2.0"></a>
+# 1.2.0 (2016-06-28)
+
+
+## Updates
+
+- **Corrected issue with JSON being URLEncoded.
+- **Added option to send timestamp along with request.
+
 <a name="1.1.0"></a>
 # 1.1.0 (2015-04-25)
 

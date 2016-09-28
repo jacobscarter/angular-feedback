@@ -33,6 +33,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                             shadowBlur:             10,
                             lineJoin:               'bevel',
                             lineWidth:              3,
+                            loadHtml2canvas:        true, 
                             html2canvasURL:         'html2canvas.js',
                             feedbackButton:         '.feedback-btn',
                             showDescriptionModal:   true,
@@ -62,7 +63,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                 if(isFeedbackButtonNative) {
                                     $(this).hide();
                                 }
-                                if (!_html2canvas) {
+                                if(setting.loadHtml2canvas)
                                     $.getScript(settings.html2canvasURL, function() {
                                         _html2canvas = true;
                                     });

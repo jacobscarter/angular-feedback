@@ -155,6 +155,12 @@ Sets border of the highlighted area.
 
 `Default: 3`
 
+### loadHtml2Canvas (Boolean)
+
+By Setting this false the user will have to include html2canvas library your self, the setting html2canvasURL will be ignored
+
+`Default: true`
+
 ### html2canvasURL (String)
 
 The URL where the plugin can download html2canvas.js from.

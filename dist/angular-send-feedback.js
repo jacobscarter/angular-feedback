@@ -1,6 +1,6 @@
 /**
  * Angular feedback directive similar to Google Feedback
- * @version v1.2.0 - 2016-06-28 * @link https://github.com/jacobscarter/angular-feedback
+ * @version v1.2.1 - 2016-12-01 * @link https://github.com/jacobscarter/angular-feedback
  * @author Jacob Carter <jacob@ieksolutions.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -48,6 +48,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                             shadowBlur:             10,
                             lineJoin:               'bevel',
                             lineWidth:              3,
+                            loadHtml2canvas:        true, 
                             html2canvasURL:         'html2canvas.js',
                             feedbackButton:         '.feedback-btn',
                             showDescriptionModal:   true,
@@ -77,7 +78,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                 if(isFeedbackButtonNative) {
                                     $(this).hide();
                                 }
-                                if (!_html2canvas) {
+                                if(!settings.loadHtml2canvas) {
                                     $.getScript(settings.html2canvasURL, function() {
                                         _html2canvas = true;
                                     });

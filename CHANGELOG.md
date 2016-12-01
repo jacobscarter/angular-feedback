@@ -1,3 +1,7 @@
+<a name="1.2.1"></a>
+# 1.2.1 (2016-09-28)
+- add new setting **loadHtml2canvas**
+
 <a name="1.2.0"></a>
 # 1.2.0 (2016-06-28)
 

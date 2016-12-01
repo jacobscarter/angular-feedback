@@ -78,7 +78,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                 if(isFeedbackButtonNative) {
                                     $(this).hide();
                                 }
-                                if(setting.loadHtml2canvas) {
+                                if(!setting.loadHtml2canvas) {
                                     $.getScript(settings.html2canvasURL, function() {
                                         _html2canvas = true;
                                     });

@@ -19,6 +19,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
 
                     var settings = $.extend({
                             ajaxURL:                '',
+                            ajaxOptions:            {},
                             postBrowserInfo:        true,
                             postHTML:               true,
                             postURL:                true,
@@ -38,6 +39,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                             showDescriptionModal:   true,
                             isDraggable:            true,
                             onScreenshotTaken:      function(){},
+
                             tpl: {
                                 initButton:     '<div id="feedback-button"></div><button class="feedback-btn feedback-btn-gray">Send feedback</button></div>',
                                 description:    '<div id="feedback-welcome"><div class="feedback-logo">Feedback</div><p>Feedback lets you send us suggestions about our products. We welcome problem reports, feature ideas and general comments.</p><p>Start by writing a brief description:</p><textarea id="feedback-note-tmp"></textarea><p>Next we\'ll let you identify areas of the page related to your description.</p><button id="feedback-welcome-next" class="feedback-next-btn feedback-btn-gray">Next</button><div id="feedback-welcome-error">Please enter a description.</div><div class="feedback-wizard-close"></div></div>',
@@ -531,7 +533,8 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                         post.note = $('#feedback-note').val();
                                         var data = {feedback: post};
                                         var jsonData = JSON.stringify(data);
-                                        $.ajax({
+                                        $.ajax(
+                                          $.extend(true, {
                                             url: typeof settings.ajaxURL === 'function' ? settings.ajaxURL() : settings.ajaxURL,
                                             dataType: 'json',
                                             contentType: 'application/json',
@@ -546,7 +549,8 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                             error: function(){
                                                 $('#feedback-module').append(settings.tpl.submitError);
                                             }
-                                        });
+                                          }, settings.ajaxOptions)
+                                        );
                                     }
                                     else {
                                         $('#feedback-overview-error').show();

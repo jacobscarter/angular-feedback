@@ -1,6 +1,6 @@
 {
   "name": "angular-send-feedback",
-  "version": "1.2.1-atomfried",
+  "version": "1.2.2-atomfried",
   "main": [
     "./dist/angular-send-feedback.js",
     "./dist/angular-send-feedback.css"

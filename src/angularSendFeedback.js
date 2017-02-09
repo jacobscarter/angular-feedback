@@ -55,7 +55,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                     }, options);
                         var supportedBrowser = !!window.HTMLCanvasElement;
                         var isFeedbackButtonNative = settings.feedbackButton == '.feedback-btn';
-                        var _html2canvas = false;
+                        var _html2canvas = !html2canvasUrl;
                         if (supportedBrowser) {
                             if(isFeedbackButtonNative) {
                                 $('body').append(settings.tpl.initButton);
@@ -549,7 +549,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                             error: function(){
                                                 $('#feedback-module').append(settings.tpl.submitError);
                                             }
-                                          }, settings.ajaxOptions)
+                                          }, (settings.ajaxOptions instanceof function) ? settings.ajaxOptions() : settings.ajaxOptions )
                                         );
                                     }
                                     else {

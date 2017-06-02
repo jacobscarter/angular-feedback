@@ -77,6 +77,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                 $('#feedback-button').remove();
                                 $('body').append(settings.tpl.initButton);
                             }
+                            $(document).off('click', settings.feedbackButton);
                             $(document).on('click', settings.feedbackButton, function(){
                                 if(isFeedbackButtonNative) {
                                     $(this).hide();
@@ -86,6 +87,8 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                         _html2canvas = true;
                                     });
                                 }
+                                console.log('rebuilding tpl');
+                                console.log(settings.tpl);
                                 var canDraw = false,
                                     img = '',
                                     h   = $(document).height(),

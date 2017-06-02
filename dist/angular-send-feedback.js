@@ -1,6 +1,6 @@
 /**
  * Angular feedback directive similar to Google Feedback
- * @version v1.2.0 - 2016-06-28 * @link https://github.com/jacobscarter/angular-feedback
+ * @version v1.2.1 - 2017-06-02 * @link https://github.com/jacobscarter/angular-feedback
  * @author Jacob Carter <jacob@ieksolutions.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -27,6 +27,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
           //return attributes.template || "angularsendfeedback.html";
         //},
         link: function($scope, $element, $attrs) {
+          $scope.$watch('options', function() {
 
             (function($){
 
@@ -34,6 +35,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
 
                     var settings = $.extend({
                             ajaxURL:                '',
+                            ajaxOptions:            {},
                             postBrowserInfo:        true,
                             postHTML:               true,
                             postURL:                true,
@@ -53,8 +55,9 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                             showDescriptionModal:   true,
                             isDraggable:            true,
                             onScreenshotTaken:      function(){},
+
                             tpl: {
-                                initButton:     '<div id="feedback-button"></div><button class="feedback-btn feedback-btn-gray">Send feedback</button></div>',
+                                initButton:     '<div id="feedback-button"><button class="feedback-btn feedback-btn-gray">Send feedback</button></div>',
                                 description:    '<div id="feedback-welcome"><div class="feedback-logo">Feedback</div><p>Feedback lets you send us suggestions about our products. We welcome problem reports, feature ideas and general comments.</p><p>Start by writing a brief description:</p><textarea id="feedback-note-tmp"></textarea><p>Next we\'ll let you identify areas of the page related to your description.</p><button id="feedback-welcome-next" class="feedback-next-btn feedback-btn-gray">Next</button><div id="feedback-welcome-error">Please enter a description.</div><div class="feedback-wizard-close"></div></div>',
                                 highlighter:    '<div id="feedback-highlighter"><div class="feedback-logo">Feedback</div><p>Click and drag on the page to help us better understand your feedback. You can move this dialog if it\'s in the way.</p><button class="feedback-sethighlight feedback-active"><div class="ico"></div><span>Highlight</span></button><label>Highlight areas relevant to your feedback.</label><button class="feedback-setblackout"><div class="ico"></div><span>Black out</span></button><label class="lower">Black out any personal information.</label><div class="feedback-buttons"><button id="feedback-highlighter-next" class="feedback-next-btn feedback-btn-gray">Next</button><button id="feedback-highlighter-back" class="feedback-back-btn feedback-btn-gray">Back</button></div><div class="feedback-wizard-close"></div></div>',
                                 overview:       '<div id="feedback-overview"><div class="feedback-logo">Feedback</div><div id="feedback-overview-description"><div id="feedback-overview-description-text"><h3>Description</h3><h3 class="feedback-additional">Additional info</h3><div id="feedback-additional-none"><span>None</span></div><div id="feedback-browser-info"><span>Browser Info</span></div><div id="feedback-page-info"><span>Page Info</span></div><div id="feedback-timestamp"><span>Time Stamp</span></div><div id="feedback-page-structure"><span>Page Structure</span></div></div></div><div id="feedback-overview-screenshot"><h3>Screenshot</h3></div><div class="feedback-buttons"><button id="feedback-submit" class="feedback-submit-btn feedback-btn-blue">Submit</button><button id="feedback-overview-back" class="feedback-back-btn feedback-btn-gray">Back</button></div><div id="feedback-overview-error">Please enter a description.</div><div class="feedback-wizard-close"></div></div>',
@@ -71,8 +74,10 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                         var _html2canvas = false;
                         if (supportedBrowser) {
                             if(isFeedbackButtonNative) {
+                                $('#feedback-button').remove();
                                 $('body').append(settings.tpl.initButton);
                             }
+                            $(document).off('click', settings.feedbackButton);
                             $(document).on('click', settings.feedbackButton, function(){
                                 if(isFeedbackButtonNative) {
                                     $(this).hide();
@@ -82,6 +87,8 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                         _html2canvas = true;
                                     });
                                 }
+                                console.log('rebuilding tpl');
+                                console.log(settings.tpl);
                                 var canDraw = false,
                                     img = '',
                                     h   = $(document).height(),
@@ -546,7 +553,8 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                         post.note = $('#feedback-note').val();
                                         var data = {feedback: post};
                                         var jsonData = JSON.stringify(data);
-                                        $.ajax({
+                                        $.ajax(
+                                          $.extend(true, {
                                             url: typeof settings.ajaxURL === 'function' ? settings.ajaxURL() : settings.ajaxURL,
                                             dataType: 'json',
                                             contentType: 'application/json',
@@ -561,7 +569,8 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
                                             error: function(){
                                                 $('#feedback-module').append(settings.tpl.submitError);
                                             }
-                                        });
+                                          }, (settings.ajaxOptions instanceof Function) ? settings.ajaxOptions() : settings.ajaxOptions )
+                                        );
                                     }
                                     else {
                                         $('#feedback-overview-error').show();
@@ -644,6 +653,7 @@ angular.module('angular-send-feedback').directive('angularFeedback', [ function(
 
             
             jQuery.feedback($scope.options);
+          });
 
             
 

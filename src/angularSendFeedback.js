@@ -1,4 +1,8 @@
 /* globals html2canvas */
+/**
+  Following StandardJS linting rules:
+  https://standardjs.com/
+**/
 function loadScript (src, callback) {
   var s, r, t
   r = false
@@ -16,6 +20,64 @@ function loadScript (src, callback) {
 }
 
 angular.module('angular-send-feedback', [])
+.directive('feedbackHighlighter', ['$window', function ($window) {
+  return {
+    restrict: 'E',
+    scope: {
+      settings: '=feedbackSettings',
+      next: '=',
+      prev: '=',
+      toggle: '=',
+      close: '='
+    },
+    templateUrl: function (element, attributes) {
+      return attributes.template || 'angular-send-feedback/src/feedback-highlighter.html'
+    },
+    link: function ($scope, elem, attrs) {
+      $scope.i10n = $scope.settings.i10n[$scope.settings.language]
+      elem = elem.children()[0]
+
+      $scope.dragging = false
+      $scope.style = {}
+
+      var prevX, prevY
+
+      $scope.move = function (e) {
+        if (!$scope.settings.isDraggable || !$scope.dragging) return
+
+        var pos = elem.getBoundingClientRect()
+
+        if (prevX === null) {
+          prevX = e.pageX
+          prevY = e.pageY
+          return
+        }
+
+        var diffX = e.pageX - prevX
+        var diffY = e.pageY - prevY
+
+        $scope.style.top = (pos.top + diffY) + 'px'
+        $scope.style.left = (pos.left + diffX) + 'px'
+        prevX = e.pageX
+        prevY = e.pageY
+      }
+
+      $scope.track = function (e) {
+        console.log('isDraggable', $scope.settings.isDraggable)
+        if (!$scope.settings.isDraggable) return
+        prevX = null
+        prevY = null
+        $scope.dragging = true
+        e.preventDefault()
+      }
+
+      $scope.untrack = function () {
+        $scope.dragging = false
+      }
+    }
+  }
+}])
+
 .directive('angularFeedback', ['$document', '$window', '$http', function ($document, $window, $http) {
   return {
     restrict: 'EA',
@@ -50,20 +112,54 @@ angular.module('angular-send-feedback', [])
         isDraggable: true,
         excludeTags: ['body', 'script', 'iframe', 'div', 'section', 'canvas', '.feedback-btn', '#feedback-module'],
         onScreenshotTaken: function () {},
-        tpl: {
-          initButton: 'initButton',
-          description: 'description',
-          highlighter: 'highlighter',
-          overview: 'overview',
-          submitSuccess: 'submitSuccess',
-          submitError: 'submitError'
+        language: 'en',
+        i10n: {
+          en: {
+            title: 'Feedback',
+            initButton: 'Send feedback',
+            submitButton: 'Submit',
+            nextButton: 'Next',
+            okButton: 'OK',
+            backButton: 'Back',
+            descriptionError: 'Please enter a description',
+            networkError: 'Sadly an error occurred while sending your feedback. Please try again.',
+            welcome: {
+              message1: 'Feedback lets you send us suggestions about our products.' +
+                       'We welcome problem reports, feature ideas and general comments.',
+              message2: 'Start by writing a brief description:',
+              message3: "Next we'll let you identify areas of the page related to your description."
+            },
+            thanks: {
+              message1: 'Thank you for your feedback. We value every piece of feedback we receive.',
+              message2: 'We cannot respond individually to every one, but we will use your comments' +
+                        'as we strive to improve your experience.'
+            },
+            draw: {
+              message1: 'Click and drag on the page to help us better understand your feedback.' +
+                        "You can move this dialog if it's in the way.",
+              highlightTitle: 'Highlight',
+              highlight: 'Highlight areas relevant to your feedback.',
+              blackoutTitle: 'Black out',
+              blackout: 'Black out any personal information.'
+            },
+            data: {
+              browser: 'Browser Info',
+              page: 'Page Info',
+              time: 'Time Stamp',
+              structure: 'Page Structure'
+            }
+          }
         },
         onClose: function () {},
         screenshotStroke: true,
         highlightElement: true,
         initialBox: true
       }, options)
+
+      $scope.i10n = settings.i10n[settings.language]
+
       $scope.settings = settings
+
       var supportedBrowser = !!window.HTMLCanvasElement
       var isFeedbackButtonNative = settings.feedbackButton === '.feedback-btn'
 
@@ -79,17 +175,34 @@ angular.module('angular-send-feedback', [])
       $scope.start = false
 
       var feedbackCanvas = angular.element(document.getElementById('feedback-canvas'))
-      $scope.feedbackHighlighterStyle = {}
-      $scope.canvasStyle = {}
+
+      function updateCanvas () {
+        var h = document.body.clientHeight
+        var w = document.body.clientWidth
+        feedbackCanvas.attr('width', w)
+        feedbackCanvas.attr('height', h)
+      }
+
+      function initCanvas () {
+        $scope.showCanvas = false
+        updateCanvas()
+        angular.element($window).bind('resize', function () {
+          updateCanvas()
+        })
+      }
+
+      function showCanvas () {
+        canDraw = true
+        $scope.showCanvas = true
+        $scope.showFeedbackHelpers = true
+        $scope.showWelcome = false
+        $scope.showFeedbackHighlighter = true
+      }
 
       $scope.launchHighlight = function (feedbackNote) {
         $scope.feedbackNote = feedbackNote
         if ($scope.feedbackNote && $scope.feedbackNote.length) {
-          canDraw = true
-          $scope.canvasStyle['cursor'] = 'crosshair'
-          $scope.showFeedbackHelpers = true
-          $scope.showWelcome = false
-          $scope.showFeedbackHighlighter = true
+          showCanvas()
         }
       }
 
@@ -102,84 +215,17 @@ angular.module('angular-send-feedback', [])
 
         canDraw = false
         var img = ''
-        var h = document.body.clientHeight
-        var w = document.body.clientWidth
 
-        $scope.feedbackModuleStyle = {
-          position: 'absolute',
-          left: '0px',
-          top: '0px'
-        }
-
-        $scope.canvasStyle['z-index'] = 30000
-        $scope.canvasStyle['width'] = w
-        $scope.canvasStyle['height'] = h
-        feedbackCanvas.attr('width', w)
-        feedbackCanvas.attr('height', h)
+        initCanvas()
 
         if (!settings.initialBox) {
-          canDraw = true
-          $scope.canvasStyle['cursor'] = 'crosshair'
-          $scope.showFeedbackHelpers = true
-          $scope.showWelcome = false
-          $scope.showFeedbackHighlighter = true
+          showCanvas()
         }
 
         if (typeof html2canvas === 'undefined') {
           loadScript(settings.html2canvasURL, start)
         } else {
           start()
-        }
-
-        var fHposY, fHposX, fHdragH, fHdragW
-
-        $scope.moving = false
-
-        $scope.moveWindow = function (e) {
-          if (!settings.isDraggable || !$scope.moving) return
-
-          var _top = e.pageY + fHposY - fHdragH
-          var _left = e.pageX + fHposX - fHdragW
-          var _bottom = fHdragH - e.pageY
-          var _right = fHdragW - e.pageX
-          var width = angular.element($window)[0].offsetWidth
-          var height = angular.element($window)[0].offsetHeight
-
-          if (_left < 0) _left = 0
-          if (_top < 0) _top = 0
-          if (_right > width) {
-            _left = width - fHdragW
-          }
-          if (_left > width - fHdragW) {
-            _left = width - fHdragW
-          }
-          if (_bottom > height) {
-            _top = height - fHdragH
-          }
-          if (_top > height - fHdragH) {
-            _top = height - fHdragH
-          }
-
-          $scope.feedbackHighlighterStyle['top'] = _top + 'px'
-          $scope.feedbackHighlighterStyle['left'] = _left + 'px'
-        }
-
-        $scope.trackHighlighter = function (e) {
-          if (!settings.isDraggable) return
-          $scope.moving = true
-          $scope.draggingHighlighter = true
-          fHdragH = e.target.offsetHeight
-          fHdragW = e.target.offsetWidth
-          fHposY = e.target.getBoundingClientRect().top + fHdragH - e.pageY
-          fHposX = e.target.getBoundingClientRect().left + fHdragW - e.pageX
-          $scope.feedbackHighlighterStyle['z-index'] = 40000
-          e.preventDefault()
-        }
-
-        $scope.untrackHighlighter = function () {
-          if (!settings.isDraggable || !$scope.moving) return
-          $scope.moving = false
-          $scope.draggingHighlighter = false
         }
 
         function start () {
@@ -191,7 +237,7 @@ angular.module('angular-send-feedback', [])
           var tmpCurrentBlock = {} // store next block before assuring user wants to drag
           var drag = false
           var clicked = false
-          $scope.highlight = 1
+          $scope.highlight = true
           var post = {}
 
           var startX = -1
@@ -208,10 +254,9 @@ angular.module('angular-send-feedback', [])
               userAgent: navigator.userAgent,
               plugins: []
             }
-
-            angular.forEach(navigator.plugins, function (value) {
-              post.browser.plugins.push(value.name)
-            })
+            for (var i = 0; i < navigator.plugins.length; i++) {
+              post.browser.plugins.push(navigator.plugins[i].name)
+            }
           }
 
           if (settings.postURL) {
@@ -219,16 +264,15 @@ angular.module('angular-send-feedback', [])
           }
 
           if (settings.postTimeStamp) {
-            post.timestamp = new Date().getTime()
+            post.timestamp = Date.now()
           }
 
           if (settings.postHTML) {
-            post.html = angular.element(document.getElementsByTagName('html')).innerHtml
+            post.html = document.getElementsByTagName('html').innerHtml
           }
 
           $scope.onMouseDown = function (e) {
             if (!canDraw || drag) return
-            // removePending()
             clicked = true
 
             startX = e.pageX - feedbackCanvas[0].getBoundingClientRect().left
@@ -295,7 +339,6 @@ angular.module('angular-send-feedback', [])
 
           doc.bind('mousemove', function (e) {
             if (!canDraw || !drag) return
-            $scope.feedbackHighlighterStyle['cursor'] = 'default'
 
             currentBlock.width = (e.pageX - feedbackCanvas[0].getBoundingClientRect().left) - startX
             currentBlock.height = (e.pageY - feedbackCanvas[0].getBoundingClientRect().top) - startY
@@ -306,8 +349,6 @@ angular.module('angular-send-feedback', [])
           function highlightHovered (ctx, elem) {
             if (!elem || drag) return
             removePending()
-
-            $scope.canvasStyle['cursor'] = 'pointer'
 
             var pos = elem.getBoundingClientRect()
 
@@ -357,8 +398,6 @@ angular.module('angular-send-feedback', [])
 
             removePending(true)
             redraw(ctx)
-
-            $scope.canvasStyle['cursor'] = 'crosshair'
 
             var excludeString = settings.excludeTags.join('):not(')
 
@@ -418,22 +457,26 @@ angular.module('angular-send-feedback', [])
 
           $scope.backToWelcome = function () {
             canDraw = false
-            $scope.canvasStyle['cursor'] = 'default'
             $scope.showFeedbackHelpers = false
             $scope.showFeedbackHighlighter = false
             $scope.showWelcome = true
           }
 
           $scope.setHighlight = function (val) {
-            $scope.highlight = val ? 1 : 0
+            if (typeof val === 'boolean') {
+              $scope.highlight = val
+            } else {
+              return $scope.highlight
+            }
           }
 
           $scope.takeScreenshot = function () {
             canDraw = false
-            $scope.canvasStyle['cursor'] = 'default'
             $window.scrollTo(0, 0) // scroll to top
             $scope.showFeedbackHelpers = false
             $scope.showFeedbackHighlighter = false
+            removePending()
+            redraw(ctx)
 
             if (!settings.screenshotStroke) {
               redraw(ctx, false)
@@ -442,6 +485,7 @@ angular.module('angular-send-feedback', [])
             setTimeout(function () {
               html2canvas(document.body, {
                 onrendered: function (canvas) {
+                  $scope.showCanvas = false
                   if (!settings.screenshotStroke) {
                     redraw(ctx)
                   }
@@ -469,11 +513,10 @@ angular.module('angular-send-feedback', [])
 
           $scope.backToHighlight = function (e) {
             canDraw = true
-            angular.element('#feedback-canvas').css('cursor', 'crosshair')
-            angular.element('#feedback-overview').hide()
-            angular.element('#feedback-helpers').show()
-            angular.element('#feedback-highlighter').show()
-            angular.element('#feedback-overview-error').hide()
+            $scope.showCanvas = false
+            $scope.showOverview = false
+            $scope.showFeedbackHelpers = true
+            $scope.showFeedbackHighlighter = true
           }
 
           $scope.submit = function () {
@@ -509,6 +552,12 @@ angular.module('angular-send-feedback', [])
       function close () {
         canDraw = false
         $scope.feedbackButtonEnabled = true
+        $scope.showWelcome = false
+        $scope.showOverview = false
+        $scope.showFeedbackHelpers = false
+        $scope.showFeedbackHighlighter = false
+        $scope.highlightblocks.length = 0
+        $scope.showCanvas = false
         $scope.start = false
         settings.onClose.call(this)
       }

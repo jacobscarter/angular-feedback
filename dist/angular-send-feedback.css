@@ -30,6 +30,10 @@
   left: 0;
 }
 
+#feedback-canvas-tmp {
+  display: none;
+}
+
 #feedback-welcome {
   position: fixed;
   top: 30%;
@@ -87,16 +91,19 @@
 }
 
 .feedback-helper {
+  position: absolute;
   cursor: default;
   background: rgba(0, 0, 0, 0);
 }
 
-.feedback-helper[data-type="highlight"] > .feedback-helper-inner {
+.feedback-helper:hover {
   background: rgba(0, 68, 255, 0.1);
 }
 
-#feedback-close {
+.feedback-close {
   position: absolute;
+  right: -15px;
+  top: -15px;
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -120,7 +127,6 @@
 
 #feedback-welcome-error,
 #feedback-overview-error {
-  display: none;
   float: right;
   margin-right: 30px;
   font-size: 13px;
@@ -136,7 +142,6 @@
   position: fixed;
   right: 100px;
   bottom: 100px;
-  display: none;
   width: 540px;
   height: 275px;
 }
@@ -144,11 +149,11 @@
 #feedback-overview {
   position: fixed;
   top: 10%;
-  left: 50%;
-  display: none;
+/*  left: 50%;*/
+  margin: auto;
   width: 840px!important;
   height: auto;
-  margin-left: -420px;
+/*  margin-left: -420px;*/
 }
 
 #feedback-submit-error,

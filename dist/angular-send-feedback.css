@@ -30,10 +30,6 @@
   left: 0;
 }
 
-#feedback-canvas-tmp {
-  display: none;
-}
-
 #feedback-welcome {
   position: fixed;
   top: 30%;
@@ -96,14 +92,14 @@
   background: rgba(0, 0, 0, 0);
 }
 
-.feedback-helper:hover {
+.feedback-helper[data-type="highlight"] > .feedback-helper-inner {
   background: rgba(0, 68, 255, 0.1);
 }
 
 .feedback-close {
   position: absolute;
-  right: -15px;
   top: -15px;
+  right: -15px;
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -149,11 +145,9 @@
 #feedback-overview {
   position: fixed;
   top: 10%;
-/*  left: 50%;*/
-  margin: auto;
+  left: 50%;
   width: 840px!important;
   height: auto;
-/*  margin-left: -420px;*/
 }
 
 #feedback-submit-error,

@@ -1,5 +1,4 @@
 /* globals html2canvas */
-console.log('refactored')
 function loadScript (src, callback) {
   var s, r, t
   r = false
@@ -95,14 +94,12 @@ angular.module('angular-send-feedback', [])
       }
 
       $scope.startFeedback = function () {
-        console.log('startFeedback()')
         $scope.start = true
         $scope.showWelcome = true
         if (isFeedbackButtonNative) {
           $scope.feedbackButtonEnabled = false
         }
 
-        console.log('start', $scope.start)
         canDraw = false
         var img = ''
         var h = document.body.clientHeight
@@ -121,7 +118,6 @@ angular.module('angular-send-feedback', [])
         feedbackCanvas.attr('height', h)
 
         if (!settings.initialBox) {
-          console.log('no initial box')
           canDraw = true
           $scope.canvasStyle['cursor'] = 'crosshair'
           $scope.showFeedbackHelpers = true
@@ -141,7 +137,6 @@ angular.module('angular-send-feedback', [])
 
         $scope.moveWindow = function (e) {
           if (!settings.isDraggable || !$scope.moving) return
-          console.log('move window')
 
           var _top = e.pageY + fHposY - fHdragH
           var _left = e.pageX + fHposX - fHdragW
@@ -183,13 +178,11 @@ angular.module('angular-send-feedback', [])
 
         $scope.untrackHighlighter = function () {
           if (!settings.isDraggable || !$scope.moving) return
-          console.log('untrackHighlighter')
           $scope.moving = false
           $scope.draggingHighlighter = false
         }
 
         function start () {
-          console.log('start ! ')
           var ctx = feedbackCanvas[0].getContext('2d')
 
           redrawBackground(ctx)
@@ -235,7 +228,6 @@ angular.module('angular-send-feedback', [])
 
           $scope.onMouseDown = function (e) {
             if (!canDraw || drag) return
-            console.log('startDragging')
             // removePending()
             clicked = true
 
@@ -259,14 +251,12 @@ angular.module('angular-send-feedback', [])
             removePending()
             currentBlock = tmpCurrentBlock
             $scope.highlightblocks.push(currentBlock)
-            console.log('highlightblocks', $scope.highlightblocks.length)
             drag = true
           }
 
           doc.bind('mouseup', function () {
             clicked = false
             if (!canDraw || !drag) return
-            console.log('mouseup document')
             drag = false
 
             var dtop = currentBlock.top
@@ -305,7 +295,6 @@ angular.module('angular-send-feedback', [])
 
           doc.bind('mousemove', function (e) {
             if (!canDraw || !drag) return
-            console.log('mousemove')
             $scope.feedbackHighlighterStyle['cursor'] = 'default'
 
             currentBlock.width = (e.pageX - feedbackCanvas[0].getBoundingClientRect().left) - startX
@@ -313,8 +302,6 @@ angular.module('angular-send-feedback', [])
 
             redraw(ctx)
           })
-
-          console.log('highlight element enabled')
 
           function highlightHovered (ctx, elem) {
             if (!elem || drag) return
@@ -442,7 +429,6 @@ angular.module('angular-send-feedback', [])
           }
 
           $scope.takeScreenshot = function () {
-            console.log('takeScreenshot')
             canDraw = false
             $scope.canvasStyle['cursor'] = 'default'
             $window.scrollTo(0, 0) // scroll to top
@@ -456,7 +442,6 @@ angular.module('angular-send-feedback', [])
             setTimeout(function () {
               html2canvas(document.body, {
                 onrendered: function (canvas) {
-                  console.log('rendered')
                   if (!settings.screenshotStroke) {
                     redraw(ctx)
                   }
@@ -484,7 +469,6 @@ angular.module('angular-send-feedback', [])
 
           $scope.backToHighlight = function (e) {
             canDraw = true
-            console.log('backToHighlight')
             angular.element('#feedback-canvas').css('cursor', 'crosshair')
             angular.element('#feedback-overview').hide()
             angular.element('#feedback-helpers').show()
@@ -523,7 +507,6 @@ angular.module('angular-send-feedback', [])
       }
 
       function close () {
-        console.log('close')
         canDraw = false
         $scope.feedbackButtonEnabled = true
         $scope.start = false

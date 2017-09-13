@@ -1,6 +1,9 @@
 <div id="feedback-highlighter" ng-mousedown='track($event)' ng-mouseup='untrack()' ng-mousemove='move($event)'
      ng-class='{"feedback-draggable":dragging}' ng-style='style'>
-  <div class="feedback-logo">{{i10n.title}}</div>
+  <div class='feedback-top'>
+    <div class="feedback-logo">{{i10n.title}}</div>
+    <div class="feedback-wizard-close" ng-click='close()'></div>
+  </div>
   <p>{{i10n.draw.message1}}</p>
   <div class='feedback-highlight-container'>
     <button class="feedback-sethighlight" ng-mousedown='toggle(true)'
@@ -22,5 +25,4 @@
       ng-click='prev()' ng-show='settings.initialBox'>{{i10n.backButton}}</button>
     <button class="feedback-next-btn feedback-btn-gray" ng-click='next()'>{{i10n.nextButton}}</button>
   </div>
-  <div class="feedback-wizard-close" ng-click='close()'></div>
 </div>

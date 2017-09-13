@@ -87,14 +87,19 @@
   margin-top: 20%;
 }
 
+.feedback-top {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
 .feedback-logo {
-  width: 34px;
   height: 32px;
   padding-left: 40px;
   margin-bottom: 16px;
   font-size: 16px;
   font-weight: normal;
-  line-height: 32px;
+  text-align: left;
   background: url(icons.png) 0px 0px no-repeat;
 }
 
@@ -135,14 +140,22 @@
 }
 
 .feedback-wizard-close {
-  position: absolute;
-  top: 2px;
-  right: 2px;
+  position: relative;
+  top: -20px;
+  right: -30px;
+  display: inline-block;
   width: 30px;
   height: 30px;
   cursor: pointer;
   background: url(icons.png) 0px -34px;
   opacity: 0.65;
+}
+
+@media only screen and (max-device-width: 768px) {
+  .feedback-wizard-close {
+    top: -5px;
+    right: -5px;
+  }
 }
 
 .feedback-bottom {

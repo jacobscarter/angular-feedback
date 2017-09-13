@@ -6,7 +6,10 @@
 
   <div id="feedback-module" ng-show='start'>
     <div id="feedback-welcome" ng-if='showWelcome'>
-      <div class="feedback-logo">{{i10n.title}}</div>
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
       <p>{{i10n.welcome.message1}}</p>
       <p>{{i10n.welcome.message2}}</p>
       <textarea id="feedback-note-tmp" ng-model="feedbackNote"></textarea>
@@ -21,14 +24,15 @@
           {{i10n.nextButton}}
         </button>
       </div>
-      <div class="feedback-wizard-close" ng-click='close()'></div>
     </div>
 
     <div id="feedback-submit-error" ng-if="submitError">
-      <div class="feedback-logo">{{i10n.title}}</div>
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
       <p>{{i10n.networkError}}</p>
       <button class="feedback-close-btn feedback-btn-blue" ng-click='close()'>{{i10n.okButton}}</button>
-      <div class="feedback-wizard-close" ng-click='close()'></div>
     </div>
 
     <feedback-highlighter ng-show="showFeedbackHighlighter" feedback-settings='settings'
@@ -47,7 +51,10 @@
     </div>
 
     <div id="feedback-overview" ng-show="showOverview">
-      <div class="feedback-logo">{{i10n.title}}</div>
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
       <div id="feedback-overview-description">
         <div id="feedback-overview-description-text">
           <h3>Description</h3>
@@ -75,16 +82,17 @@
         <button class="feedback-submit-btn feedback-btn-blue" ng-click="submit()">{{i10n.submitButton}}</button>
       </div>
       <div id="feedback-overview-error" ng-hide="feedbackNote">{{i10n.descriptionError}}</div>
-      <div class="feedback-wizard-close" ng-click='close()'></div>
     </div>
 
 
     <div id="feedback-submit-success" ng-if="submitSuccess">
-      <div class="feedback-logo">{{i10n.title}}</div>
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
       <p>{{i10n.thanks.message1}}</p>
       <p>{{i10n.thanks.message2}}</p>
       <button class="feedback-close-btn feedback-btn-blue" ng-click='close()'>{{i10n.okButton}}</button>
-      <div class="feedback-wizard-close" ng-click='close()'></div>
     </div>
   </div>
   <canvas id="feedback-canvas" ng-mousemove='onHover($event)' ng-mouseup='selectBlock($event)'

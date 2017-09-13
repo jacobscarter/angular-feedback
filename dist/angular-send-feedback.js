@@ -16,7 +16,10 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "\n" +
     "  <div id=\"feedback-module\" ng-show='start'>\n" +
     "    <div id=\"feedback-welcome\" ng-if='showWelcome'>\n" +
-    "      <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "      <div class='feedback-top'>\n" +
+    "        <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "        <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
+    "      </div>\n" +
     "      <p>{{i10n.welcome.message1}}</p>\n" +
     "      <p>{{i10n.welcome.message2}}</p>\n" +
     "      <textarea id=\"feedback-note-tmp\" ng-model=\"feedbackNote\"></textarea>\n" +
@@ -31,14 +34,15 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "          {{i10n.nextButton}}\n" +
     "        </button>\n" +
     "      </div>\n" +
-    "      <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div id=\"feedback-submit-error\" ng-if=\"submitError\">\n" +
-    "      <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "      <div class='feedback-top'>\n" +
+    "        <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "        <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
+    "      </div>\n" +
     "      <p>{{i10n.networkError}}</p>\n" +
     "      <button class=\"feedback-close-btn feedback-btn-blue\" ng-click='close()'>{{i10n.okButton}}</button>\n" +
-    "      <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
     "    </div>\n" +
     "\n" +
     "    <feedback-highlighter ng-show=\"showFeedbackHighlighter\" feedback-settings='settings'\n" +
@@ -57,7 +61,10 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "    </div>\n" +
     "\n" +
     "    <div id=\"feedback-overview\" ng-show=\"showOverview\">\n" +
-    "      <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "      <div class='feedback-top'>\n" +
+    "        <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "        <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
+    "      </div>\n" +
     "      <div id=\"feedback-overview-description\">\n" +
     "        <div id=\"feedback-overview-description-text\">\n" +
     "          <h3>Description</h3>\n" +
@@ -85,16 +92,17 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "        <button class=\"feedback-submit-btn feedback-btn-blue\" ng-click=\"submit()\">{{i10n.submitButton}}</button>\n" +
     "      </div>\n" +
     "      <div id=\"feedback-overview-error\" ng-hide=\"feedbackNote\">{{i10n.descriptionError}}</div>\n" +
-    "      <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
     "    <div id=\"feedback-submit-success\" ng-if=\"submitSuccess\">\n" +
-    "      <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "      <div class='feedback-top'>\n" +
+    "        <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "        <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
+    "      </div>\n" +
     "      <p>{{i10n.thanks.message1}}</p>\n" +
     "      <p>{{i10n.thanks.message2}}</p>\n" +
     "      <button class=\"feedback-close-btn feedback-btn-blue\" ng-click='close()'>{{i10n.okButton}}</button>\n" +
-    "      <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "  <canvas id=\"feedback-canvas\" ng-mousemove='onHover($event)' ng-mouseup='selectBlock($event)'\n" +
@@ -107,7 +115,10 @@ angular.module("feedback-highlighter.html", []).run(["$templateCache", function(
   $templateCache.put("feedback-highlighter.html",
     "<div id=\"feedback-highlighter\" ng-mousedown='track($event)' ng-mouseup='untrack()' ng-mousemove='move($event)'\n" +
     "     ng-class='{\"feedback-draggable\":dragging}' ng-style='style'>\n" +
-    "  <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "  <div class='feedback-top'>\n" +
+    "    <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
+    "    <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
+    "  </div>\n" +
     "  <p>{{i10n.draw.message1}}</p>\n" +
     "  <div class='feedback-highlight-container'>\n" +
     "    <button class=\"feedback-sethighlight\" ng-mousedown='toggle(true)'\n" +
@@ -129,7 +140,6 @@ angular.module("feedback-highlighter.html", []).run(["$templateCache", function(
     "      ng-click='prev()' ng-show='settings.initialBox'>{{i10n.backButton}}</button>\n" +
     "    <button class=\"feedback-next-btn feedback-btn-gray\" ng-click='next()'>{{i10n.nextButton}}</button>\n" +
     "  </div>\n" +
-    "  <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
     "</div>\n" +
     "");
 }]);

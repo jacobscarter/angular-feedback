@@ -10,11 +10,14 @@
       <p>{{i10n.welcome.message1}}</p>
       <p>{{i10n.welcome.message2}}</p>
       <textarea id="feedback-note-tmp" ng-model="feedbackNote"></textarea>
+      <p ng-show='settings.postCategory'>{{i10n.welcome.message4}}</p>
+      <select ng-options='cat for cat in settings.categories' ng-model='feedbackCategory'
+           ng-show='settings.postCategory' ng-init='feedbackCategory = settings.defaultCategory'></select>
       <p>{{i10n.welcome.message3}}</p>
       <div class='feedback-bottom'>
         <div id="feedback-welcome-error" ng-hide="feedbackNote">{{i10n.descriptionError}}</div>
         <button class="feedback-next-btn feedback-btn-gray"
-                ng-click='launchHighlight(feedbackNote)' ng-disabled="!feedbackNote">
+                ng-click='launchHighlight(feedbackNote, feedbackCategory)' ng-disabled="!feedbackNote">
           {{i10n.nextButton}}
         </button>
       </div>

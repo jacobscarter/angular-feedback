@@ -20,11 +20,14 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "      <p>{{i10n.welcome.message1}}</p>\n" +
     "      <p>{{i10n.welcome.message2}}</p>\n" +
     "      <textarea id=\"feedback-note-tmp\" ng-model=\"feedbackNote\"></textarea>\n" +
+    "      <p ng-show='settings.postCategory'>{{i10n.welcome.message4}}</p>\n" +
+    "      <select ng-options='cat for cat in settings.categories' ng-model='feedbackCategory'\n" +
+    "           ng-show='settings.postCategory' ng-init='feedbackCategory = settings.defaultCategory'></select>\n" +
     "      <p>{{i10n.welcome.message3}}</p>\n" +
     "      <div class='feedback-bottom'>\n" +
     "        <div id=\"feedback-welcome-error\" ng-hide=\"feedbackNote\">{{i10n.descriptionError}}</div>\n" +
     "        <button class=\"feedback-next-btn feedback-btn-gray\"\n" +
-    "                ng-click='launchHighlight(feedbackNote)' ng-disabled=\"!feedbackNote\">\n" +
+    "                ng-click='launchHighlight(feedbackNote, feedbackCategory)' ng-disabled=\"!feedbackNote\">\n" +
     "          {{i10n.nextButton}}\n" +
     "        </button>\n" +
     "      </div>\n" +
@@ -65,7 +68,7 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "            <ul>\n" +
     "              <li ng-show='!settings.postBrowserInfo&&!settings.pageInfo&&!settings.postHTML&&!settings.postTimeStamp'>None</li>\n" +
     "              <li ng-show='settings.postBrowserInfo'>{{i10n.data.browser}}</li>\n" +
-    "              <li ng-show='settings.pageInfo'>{{i10n.data.info}}</li>\n" +
+    "              <li ng-show='settings.pageInfo'>{{i10n.data.page}}</li>\n" +
     "              <li ng-show='settings.postTimeStamp'>{{i10n.data.time}}</li>\n" +
     "              <li ng-show='settings.postHTML'>{{i10n.data.structure}}</li>\n" +
     "            </ul>\n" +
@@ -199,7 +202,6 @@ angular.module('angular-send-feedback', [])
       }
 
       $scope.track = function (e) {
-        console.log('isDraggable', $scope.settings.isDraggable)
         if (!$scope.settings.isDraggable) return
         prevX = null
         prevY = null
@@ -210,6 +212,11 @@ angular.module('angular-send-feedback', [])
       $scope.untrack = function () {
         $scope.dragging = false
       }
+
+      var e = angular.element(elem)
+      e.on('touchstart', $scope.track)
+      e.on('touchend', $scope.untrack)
+      e.on('touchmove', $scope.move)
     }
   }
 }])
@@ -246,9 +253,12 @@ angular.module('angular-send-feedback', [])
         feedbackButtonNative: true,
         showDescriptionModal: true,
         isDraggable: true,
+        postCategory: true,
+        categories: ['Suggestion', 'Bug report', 'Product error', 'Other'],
+        defaultCategory: 'Suggestion',
         excludeTags: ['body', 'script', 'iframe', 'div', 'section', 'canvas', '.feedback-btn', '#feedback-module'],
         onScreenshotTaken: function () {},
-        language: 'en',
+        language: 'fr',
         i10n: {
           en: {
             title: 'Feedback',
@@ -263,11 +273,12 @@ angular.module('angular-send-feedback', [])
               message1: 'Feedback lets you send us suggestions about our products. ' +
                        'We welcome problem reports, feature ideas and general comments.',
               message2: 'Start by writing a brief description:',
-              message3: "Next we'll let you identify areas of the page related to your description."
+              message3: "Next we'll let you identify areas of the page related to your description.",
+              message4: 'Please indicate the category of your feedback, it helps up organize feedbacks.'
             },
             thanks: {
               message1: 'Thank you for your feedback. We value every piece of feedback we receive.',
-              message2: 'We cannot respond individually to every one, but we will use your comments' +
+              message2: 'We cannot respond individually to every one, but we will use your comments ' +
                         'as we strive to improve your experience.'
             },
             draw: {
@@ -283,6 +294,44 @@ angular.module('angular-send-feedback', [])
               page: 'Page Info',
               time: 'Time Stamp',
               structure: 'Page Structure'
+            }
+          },
+          fr: {
+            title: 'Avis',
+            initButton: 'Un avis ?',
+            submitButton: 'Envoyer',
+            nextButton: 'Suivant',
+            okButton: 'OK',
+            backButton: 'Retour',
+            descriptionError: 'Veuillez entrer une description',
+            networkError: "Malheureusement une erreur s'est produite pendant l'envoi de votre avis. " +
+                          'Veuillez réessayer.',
+            welcome: {
+              message1: 'Les avis vous permettent de nous envoyer des suggestions à propos de notre site. ' +
+                        "Nous accueillons les rapports d'erreurs, idées de fonctionnalités et commentaires généraux",
+              message2: 'Commencez par rédiger une brève description:',
+              message3: 'Par la suite, nous vous laisserons identifier les zones de la page correspondant ' +
+                        'à votre description',
+              message4: 'À quelle catégorie correspond votre retour ?'
+            },
+            thanks: {
+              message1: 'Merci pour votre retour. Nous analysons chaque avis que nous recevons.',
+              message2: "Nous ne pouvons pas répondre à tous les commentaires, mais sachez qu'ils sont toujours " +
+                        'pris en compte.'
+            },
+            draw: {
+              message1: 'Cliquez et glissez votre curseur sur la page pour nous aider à mieux comprendre votre ' +
+                        'avis',
+              highlightTitle: 'Surligner',
+              highlight: 'Surlignez les zones pertinentes',
+              blackoutTitle: 'Masquer',
+              blackout: 'Masquez vos informations personnelles'
+            },
+            data: {
+              browser: 'Informations sur votre navigateur',
+              page: 'Informations sur la page',
+              time: 'Date du jour',
+              structure: 'Structure de la page'
             }
           }
         },
@@ -308,6 +357,8 @@ angular.module('angular-send-feedback', [])
       var doc = angular.element($document)
 
       $scope.feedbackButtonEnabled = true
+      $scope.feedbackNote = ''
+      $scope.feedbackCategory = ''
       $scope.start = false
 
       var feedbackCanvas = angular.element(document.getElementById('feedback-canvas'))
@@ -335,8 +386,9 @@ angular.module('angular-send-feedback', [])
         $scope.showFeedbackHighlighter = true
       }
 
-      $scope.launchHighlight = function (feedbackNote) {
-        $scope.feedbackNote = feedbackNote
+      $scope.launchHighlight = function (note, cat) {
+        $scope.feedbackCategory = cat
+        $scope.feedbackNote = note
         if ($scope.feedbackNote && $scope.feedbackNote.length) {
           showCanvas()
         }
@@ -593,6 +645,7 @@ angular.module('angular-send-feedback', [])
 
           $scope.backToWelcome = function () {
             canDraw = false
+            $scope.showCanvas = false
             $scope.showFeedbackHelpers = false
             $scope.showFeedbackHighlighter = false
             $scope.showWelcome = true
@@ -669,6 +722,7 @@ angular.module('angular-send-feedback', [])
 
               post.img = img
               post.note = $scope.feedbackNote
+              post.category = $scope.feedbackCategory
               var data = {feedback: post}
               var jsonData = JSON.stringify(data)
               $http.post({

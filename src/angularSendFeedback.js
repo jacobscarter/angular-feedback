@@ -19,7 +19,7 @@ function loadScript (src, callback) {
   t.parentNode.insertBefore(s, t)
 }
 
-angular.module('angular-send-feedback', [])
+angular.module('angular-send-feedback', ['templates-angularsendfeedback'])
 .directive('feedbackHighlighter', ['$window', function ($window) {
   return {
     restrict: 'E',
@@ -31,7 +31,7 @@ angular.module('angular-send-feedback', [])
       close: '='
     },
     templateUrl: function (element, attributes) {
-      return attributes.template || 'angular-send-feedback/src/feedback-highlighter.html'
+      return attributes.template || 'feedback-highlighter.html'
     },
     link: function ($scope, elem, attrs) {
       $scope.i10n = $scope.settings.i10n[$scope.settings.language]
@@ -92,7 +92,7 @@ angular.module('angular-send-feedback', [])
       options: '='
     },
     templateUrl: function (element, attributes) {
-      return attributes.template || 'angular-send-feedback/src/angularsendfeedback.html'
+      return attributes.template || 'angularsendfeedback.html'
     },
     link: function ($scope) {
       var options = $scope.options
@@ -589,8 +589,9 @@ angular.module('angular-send-feedback', [])
               post.category = $scope.feedbackCategory
               var data = {feedback: post}
               var jsonData = JSON.stringify(data)
-              $http.post({
+              $http({
                 url: typeof settings.ajaxURL === 'function' ? settings.ajaxURL() : settings.ajaxURL,
+                method: 'POST',
                 data: jsonData,
                 headers: {
                   'Content-Type': 'application/json'

@@ -11,11 +11,13 @@
       <p>{{i10n.welcome.message2}}</p>
       <textarea id="feedback-note-tmp" ng-model="feedbackNote"></textarea>
       <p>{{i10n.welcome.message3}}</p>
-      <button class="feedback-next-btn feedback-btn-gray"
-              ng-click='launchHighlight(feedbackNote)' ng-disabled="!feedbackNote">
-        {{i10n.nextButton}}
-      </button>
-      <div id="feedback-welcome-error" ng-hide="feedbackNote">{{i10n.descriptionError}}</div>
+      <div class='feedback-bottom'>
+        <div id="feedback-welcome-error" ng-hide="feedbackNote">{{i10n.descriptionError}}</div>
+        <button class="feedback-next-btn feedback-btn-gray"
+                ng-click='launchHighlight(feedbackNote)' ng-disabled="!feedbackNote">
+          {{i10n.nextButton}}
+        </button>
+      </div>
       <div class="feedback-wizard-close" ng-click='close()'></div>
     </div>
 
@@ -66,10 +68,8 @@
         <img class="feedback-screenshot" ng-src="{{screenshot}}"/>
       </div>
       <div class="feedback-buttons">
-        <button id="feedback-submit" class="feedback-submit-btn feedback-btn-blue"
-                                     ng-click="submit()">{{i10n.submitButton}}</button>
-        <button id="feedback-overview-back" class="feedback-back-btn feedback-btn-gray"
-          ng-click='backToHighlight()'>{{i10n.backButton}}</button>
+        <button class="feedback-back-btn feedback-btn-gray" ng-click='backToHighlight()'>{{i10n.backButton}}</button>
+        <button class="feedback-submit-btn feedback-btn-blue" ng-click="submit()">{{i10n.submitButton}}</button>
       </div>
       <div id="feedback-overview-error" ng-hide="feedbackNote">{{i10n.descriptionError}}</div>
       <div class="feedback-wizard-close" ng-click='close()'></div>

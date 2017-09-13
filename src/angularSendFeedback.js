@@ -56,8 +56,11 @@ angular.module('angular-send-feedback', [])
         var diffX = e.pageX - prevX
         var diffY = e.pageY - prevY
 
+        $scope.style.height = pos.height + 'px'
+        $scope.style.width = pos.width + 'px'
         $scope.style.top = (pos.top + diffY) + 'px'
         $scope.style.left = (pos.left + diffX) + 'px'
+
         prevX = e.pageX
         prevY = e.pageY
       }
@@ -124,7 +127,7 @@ angular.module('angular-send-feedback', [])
             descriptionError: 'Please enter a description',
             networkError: 'Sadly an error occurred while sending your feedback. Please try again.',
             welcome: {
-              message1: 'Feedback lets you send us suggestions about our products.' +
+              message1: 'Feedback lets you send us suggestions about our products. ' +
                        'We welcome problem reports, feature ideas and general comments.',
               message2: 'Start by writing a brief description:',
               message3: "Next we'll let you identify areas of the page related to your description."
@@ -476,7 +479,11 @@ angular.module('angular-send-feedback', [])
             $scope.showFeedbackHelpers = false
             $scope.showFeedbackHighlighter = false
             removePending()
-            redraw(ctx)
+            if (!$scope.highlightblocks.length) {
+              $scope.showCanvas = false
+            } else {
+              redraw(ctx)
+            }
 
             if (!settings.screenshotStroke) {
               redraw(ctx, false)
@@ -513,7 +520,7 @@ angular.module('angular-send-feedback', [])
 
           $scope.backToHighlight = function (e) {
             canDraw = true
-            $scope.showCanvas = false
+            $scope.showCanvas = true
             $scope.showOverview = false
             $scope.showFeedbackHelpers = true
             $scope.showFeedbackHighlighter = true

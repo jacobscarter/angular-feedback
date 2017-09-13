@@ -1,6 +1,6 @@
 /**
  * Angular feedback directive similar to Google Feedback
- * @version v1.2.2 - 2017-09-12 * @link https://github.com/pepperlabs/angular-feedback
+ * @version v1.2.2 - 2017-09-13 * @link https://github.com/pepperlabs/angular-feedback
  * @author Jacob Carter <jacob@ieksolutions.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -21,11 +21,13 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "      <p>{{i10n.welcome.message2}}</p>\n" +
     "      <textarea id=\"feedback-note-tmp\" ng-model=\"feedbackNote\"></textarea>\n" +
     "      <p>{{i10n.welcome.message3}}</p>\n" +
-    "      <button class=\"feedback-next-btn feedback-btn-gray\"\n" +
-    "              ng-click='launchHighlight(feedbackNote)' ng-disabled=\"!feedbackNote\">\n" +
-    "        {{i10n.nextButton}}\n" +
-    "      </button>\n" +
-    "      <div id=\"feedback-welcome-error\" ng-hide=\"feedbackNote\">{{i10n.descriptionError}}</div>\n" +
+    "      <div class='feedback-bottom'>\n" +
+    "        <div id=\"feedback-welcome-error\" ng-hide=\"feedbackNote\">{{i10n.descriptionError}}</div>\n" +
+    "        <button class=\"feedback-next-btn feedback-btn-gray\"\n" +
+    "                ng-click='launchHighlight(feedbackNote)' ng-disabled=\"!feedbackNote\">\n" +
+    "          {{i10n.nextButton}}\n" +
+    "        </button>\n" +
+    "      </div>\n" +
     "      <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
     "    </div>\n" +
     "\n" +
@@ -76,10 +78,8 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "        <img class=\"feedback-screenshot\" ng-src=\"{{screenshot}}\"/>\n" +
     "      </div>\n" +
     "      <div class=\"feedback-buttons\">\n" +
-    "        <button id=\"feedback-submit\" class=\"feedback-submit-btn feedback-btn-blue\"\n" +
-    "                                     ng-click=\"submit()\">{{i10n.submitButton}}</button>\n" +
-    "        <button id=\"feedback-overview-back\" class=\"feedback-back-btn feedback-btn-gray\"\n" +
-    "          ng-click='backToHighlight()'>{{i10n.backButton}}</button>\n" +
+    "        <button class=\"feedback-back-btn feedback-btn-gray\" ng-click='backToHighlight()'>{{i10n.backButton}}</button>\n" +
+    "        <button class=\"feedback-submit-btn feedback-btn-blue\" ng-click=\"submit()\">{{i10n.submitButton}}</button>\n" +
     "      </div>\n" +
     "      <div id=\"feedback-overview-error\" ng-hide=\"feedbackNote\">{{i10n.descriptionError}}</div>\n" +
     "      <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
@@ -106,22 +106,25 @@ angular.module("feedback-highlighter.html", []).run(["$templateCache", function(
     "     ng-class='{\"feedback-draggable\":dragging}' ng-style='style'>\n" +
     "  <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
     "  <p>{{i10n.draw.message1}}</p>\n" +
-    "  <button class=\"feedback-sethighlight\" ng-mousedown='toggle(true)'\n" +
-    "          ng-class='{\"feedback-active\": toggle()}'>\n" +
-    "    <div class=\"ico\"></div>\n" +
-    "    <span>{{i10n.draw.highlightTitle}}</span>\n" +
-    "  </button>\n" +
-    "  <label>{{i10n.draw.highlight}}</label>\n" +
-    "  <button class=\"feedback-setblackout\" ng-mousedown='toggle(false)' ng-class='{\"feedback-active\": !toggle()}'>\n" +
-    "    <div class=\"ico\"></div>\n" +
-    "    <span>{{i10n.draw.blackoutTitle}}</span>\n" +
-    "  </button>\n" +
-    "  <label class=\"lower\">{{i10n.draw.blackout}}</label>\n" +
+    "  <div class='feedback-highlight-container'>\n" +
+    "    <button class=\"feedback-sethighlight\" ng-mousedown='toggle(true)'\n" +
+    "            ng-class='{\"feedback-active\": toggle()}'>\n" +
+    "      <div class=\"ico\"></div>\n" +
+    "      <span>{{i10n.draw.highlightTitle}}</span>\n" +
+    "    </button>\n" +
+    "    <label>{{i10n.draw.highlight}}</label>\n" +
+    "  </div>\n" +
+    "  <div class='feedback-highlight-container'>\n" +
+    "    <button class=\"feedback-setblackout\" ng-mousedown='toggle(false)' ng-class='{\"feedback-active\": !toggle()}'>\n" +
+    "      <div class=\"ico\"></div>\n" +
+    "      <span>{{i10n.draw.blackoutTitle}}</span>\n" +
+    "    </button>\n" +
+    "    <label class=\"lower\">{{i10n.draw.blackout}}</label>\n" +
+    "  </div>\n" +
     "  <div class=\"feedback-buttons\">\n" +
-    "    <button id=\"feedback-highlighter-next\" class=\"feedback-next-btn feedback-btn-gray\"\n" +
-    "      ng-click='next()'>{{i10n.nextButton}}</button>\n" +
-    "    <button id=\"feedback-highlighter-back\" class=\"feedback-back-btn feedback-btn-gray\"\n" +
+    "    <button class=\"feedback-back-btn feedback-btn-gray\"\n" +
     "      ng-click='prev()' ng-show='settings.initialBox'>{{i10n.backButton}}</button>\n" +
+    "    <button class=\"feedback-next-btn feedback-btn-gray\" ng-click='next()'>{{i10n.nextButton}}</button>\n" +
     "  </div>\n" +
     "  <div class=\"feedback-wizard-close\" ng-click='close()'></div>\n" +
     "</div>\n" +
@@ -186,8 +189,11 @@ angular.module('angular-send-feedback', [])
         var diffX = e.pageX - prevX
         var diffY = e.pageY - prevY
 
+        $scope.style.height = pos.height + 'px'
+        $scope.style.width = pos.width + 'px'
         $scope.style.top = (pos.top + diffY) + 'px'
         $scope.style.left = (pos.left + diffX) + 'px'
+
         prevX = e.pageX
         prevY = e.pageY
       }
@@ -254,7 +260,7 @@ angular.module('angular-send-feedback', [])
             descriptionError: 'Please enter a description',
             networkError: 'Sadly an error occurred while sending your feedback. Please try again.',
             welcome: {
-              message1: 'Feedback lets you send us suggestions about our products.' +
+              message1: 'Feedback lets you send us suggestions about our products. ' +
                        'We welcome problem reports, feature ideas and general comments.',
               message2: 'Start by writing a brief description:',
               message3: "Next we'll let you identify areas of the page related to your description."
@@ -606,7 +612,11 @@ angular.module('angular-send-feedback', [])
             $scope.showFeedbackHelpers = false
             $scope.showFeedbackHighlighter = false
             removePending()
-            redraw(ctx)
+            if (!$scope.highlightblocks.length) {
+              $scope.showCanvas = false
+            } else {
+              redraw(ctx)
+            }
 
             if (!settings.screenshotStroke) {
               redraw(ctx, false)
@@ -643,7 +653,7 @@ angular.module('angular-send-feedback', [])
 
           $scope.backToHighlight = function (e) {
             canDraw = true
-            $scope.showCanvas = false
+            $scope.showCanvas = true
             $scope.showOverview = false
             $scope.showFeedbackHelpers = true
             $scope.showFeedbackHighlighter = true

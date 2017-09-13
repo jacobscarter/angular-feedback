@@ -66,7 +66,6 @@ angular.module('angular-send-feedback', [])
       }
 
       $scope.track = function (e) {
-        console.log('isDraggable', $scope.settings.isDraggable)
         if (!$scope.settings.isDraggable) return
         prevX = null
         prevY = null
@@ -77,6 +76,11 @@ angular.module('angular-send-feedback', [])
       $scope.untrack = function () {
         $scope.dragging = false
       }
+
+      var e = angular.element(elem)
+      e.on('touchstart', $scope.track)
+      e.on('touchend', $scope.untrack)
+      e.on('touchmove', $scope.move)
     }
   }
 }])
@@ -115,7 +119,7 @@ angular.module('angular-send-feedback', [])
         isDraggable: true,
         excludeTags: ['body', 'script', 'iframe', 'div', 'section', 'canvas', '.feedback-btn', '#feedback-module'],
         onScreenshotTaken: function () {},
-        language: 'en',
+        language: 'fr',
         i10n: {
           en: {
             title: 'Feedback',
@@ -134,7 +138,7 @@ angular.module('angular-send-feedback', [])
             },
             thanks: {
               message1: 'Thank you for your feedback. We value every piece of feedback we receive.',
-              message2: 'We cannot respond individually to every one, but we will use your comments' +
+              message2: 'We cannot respond individually to every one, but we will use your comments ' +
                         'as we strive to improve your experience.'
             },
             draw: {
@@ -150,6 +154,42 @@ angular.module('angular-send-feedback', [])
               page: 'Page Info',
               time: 'Time Stamp',
               structure: 'Page Structure'
+            }
+          },
+          fr: {
+            title: 'Avis',
+            initButton: 'Un avis ?',
+            submitButton: 'Envoyer',
+            nextButton: 'Suivant',
+            okButton: 'OK',
+            backButton: 'Retour',
+            descriptionError: 'Veuillez entrer une description',
+            networkError: "Malheureusement une erreur s'est produite pendant l'envoi de votre avis. Veuillez réessayer.",
+            welcome: {
+              message1: 'Les avis vous permettent de nous envoyer des suggestions à propos de notre site. ' +
+                        "Nous accueillons les rapports d'erreurs, idées de fonctionnalités et commentaires généraux",
+              message2: 'Commencez par rédiger une brève description:',
+              message3: 'Par la suite, nous vous laisserons identifier les zones de la page correspondant ' +
+                        'à votre description'
+            },
+            thanks: {
+              message1: 'Merci pour votre retour. Nous analysons chaque avis que nous recevons.',
+              message2: "Nous ne pouvons pas répondre à tous les commentaires, mais sachez qu'ils sont toujours " +
+                        'pris en compte.'
+            },
+            draw: {
+              message1: 'Cliquez et glissez votre curseur sur la page pour nous aider à mieux comprendre votre ' +
+                        'avis',
+              highlightTitle: 'Surligner',
+              highlight: 'Surlignez les zones pertinentes',
+              blackoutTitle: 'Masquer',
+              blackout: 'Masquez vos informations personnelles'
+            },
+            data: {
+              browser: 'Informations sur votre navigateur',
+              page: 'Informations sur la page',
+              time: 'Date du jour',
+              structure: 'Structure de la page'
             }
           }
         },
@@ -460,6 +500,7 @@ angular.module('angular-send-feedback', [])
 
           $scope.backToWelcome = function () {
             canDraw = false
+            $scope.showCanvas = false
             $scope.showFeedbackHelpers = false
             $scope.showFeedbackHighlighter = false
             $scope.showWelcome = true

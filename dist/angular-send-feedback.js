@@ -1,6 +1,6 @@
 /**
  * Angular feedback directive similar to Google Feedback
- * @version v1.2.2 - 2017-09-13 * @link https://github.com/pepperlabs/angular-feedback
+ * @version v1.2.2 - 2017-09-17 * @link https://github.com/pepperlabs/angular-feedback
  * @author Jacob Carter <jacob@ieksolutions.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -726,6 +726,7 @@ angular.module('angular-send-feedback', ['templates-angularsendfeedback'])
             canDraw = false
 
             if ($scope.feedbackNote) {
+              $scope.feedbackButtonEnabled = true
               $scope.submitSuccess = false
               $scope.submitError = false
               $scope.showOverview = false

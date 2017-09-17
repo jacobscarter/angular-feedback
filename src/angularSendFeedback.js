@@ -580,6 +580,7 @@ angular.module('angular-send-feedback', ['templates-angularsendfeedback'])
             canDraw = false
 
             if ($scope.feedbackNote) {
+              $scope.feedbackButtonEnabled = true
               $scope.submitSuccess = false
               $scope.submitError = false
               $scope.showOverview = false

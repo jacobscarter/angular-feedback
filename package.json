@@ -1,14 +1,14 @@
 {
   "name": "angular-send-feedback",
   "description": "Angular feedback directive similar to Google Feedback",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "filename": "angular-send-feedback.min.js",
   "main": "./dist/angular-send-feedback.min.js",
-  "homepage": "https://github.com/jacobscarter/angular-feedback",
+  "homepage": "https://github.com/pepperlabs/angular-feedback",
   "author": "Jacob Carter <jacob@ieksolutions.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jacobscarter/angular-feedback.git"
+    "url": "git://github.com/pepperlabs/angular-feedback.git"
   },
   "keywords": [
     "angular",
@@ -16,10 +16,19 @@
     "feedback",
     "google-feedback"
   ],
+  "standard": {
+    "globals": [
+      "angular"
+    ]
+  },
   "maintainers": [
     {
       "name": "Jacob Carter",
       "website": "http://strangemilk.com/"
+    },
+    {
+      "name": "Louis Cherel",
+      "website": ""
     }
   ],
   "dependencies": {},

@@ -1,0 +1,100 @@
+<div>
+  <div id="feedback-button" ng-show='settings.feedbackButtonNative && feedbackButtonEnabled && !start'
+       ng-click='startFeedback()'>
+    <button class="feedback-btn feedback-btn-gray">{{i10n.initButton}}</button>
+  </div>
+
+  <div id="feedback-module" ng-if='start'>
+    <div id="feedback-welcome" ng-if='showWelcome'>
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
+      <p>{{i10n.welcome.message1}}</p>
+      <p>{{i10n.welcome.message2}}</p>
+      <textarea id="feedback-note-tmp" ng-model="feedbackNote"></textarea>
+      <p ng-show='settings.postCategory'>{{i10n.welcome.message4}}</p>
+      <select ng-options='cat for cat in settings.categories' ng-model='feedbackCategory'
+           ng-show='settings.postCategory' ng-init='feedbackCategory = settings.defaultCategory'></select>
+      <p>{{i10n.welcome.message3}}</p>
+      <div class='feedback-bottom'>
+        <div id="feedback-welcome-error" ng-hide="feedbackNote">{{i10n.descriptionError}}</div>
+        <button class="feedback-next-btn feedback-btn-gray"
+                ng-click='launchHighlight(feedbackNote, feedbackCategory)' ng-disabled="!feedbackNote">
+          {{i10n.nextButton}}
+        </button>
+      </div>
+    </div>
+
+    <div id="feedback-submit-error" ng-if="submitError">
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
+      <p>{{i10n.networkError}}</p>
+      <button class="feedback-close-btn feedback-btn-blue" ng-click='close()'>{{i10n.okButton}}</button>
+    </div>
+
+    <feedback-highlighter ng-show="showFeedbackHighlighter" feedback-settings='settings'
+      next='takeScreenshot' prev='backToWelcome' toggle='setHighlight' close='close'>
+    </feedback-highlighter>
+
+    <div id="feedback-helpers" ng-show='showFeedbackHelpers'>
+      <div ng-repeat="item in highlightblocks" class="feedback-helper"
+           ng-mouseover='item.showRemove = true' ng-mouseleave='item.showRemove = false'
+           ng-style="{'top': item.top + 'px','left': item.left + 'px',
+                      'width': item.width + 'px','height': item.height + 'px',
+                      'z-index': item.zIndex}">
+        <div class="feedback-close" ng-style="item.styleClose" ng-click="removeBlock($index)"
+            ng-show="item.showRemove"></div>
+      </div>
+    </div>
+
+    <div id="feedback-overview" ng-show="showOverview">
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
+      <div id="feedback-overview-description">
+        <div id="feedback-overview-description-text">
+          <h3>Description</h3>
+          <textarea id="feedback-overview-note" ng-model="feedbackNote"></textarea>
+
+          <h3 class="feedback-additional">Additional info</h3>
+          <div id="feedback-additional-content">
+            <ul>
+              <li ng-show='!settings.postBrowserInfo&&!settings.pageInfo&&!settings.postHTML&&!settings.postTimeStamp'>None</li>
+              <li ng-show='settings.postBrowserInfo'>{{i10n.data.browser}}</li>
+              <li ng-show='settings.pageInfo'>{{i10n.data.page}}</li>
+              <li ng-show='settings.postTimeStamp'>{{i10n.data.time}}</li>
+              <li ng-show='settings.postHTML'>{{i10n.data.structure}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="feedback-overview-screenshot">
+        <h3>Screenshot</h3>
+        <img class="feedback-screenshot" ng-src="{{screenshot}}"/>
+      </div>
+      <div class="feedback-buttons">
+        <button class="feedback-back-btn feedback-btn-gray" ng-click='backToHighlight()'>{{i10n.backButton}}</button>
+        <button class="feedback-submit-btn feedback-btn-blue" ng-click="submit()">{{i10n.submitButton}}</button>
+      </div>
+      <div id="feedback-overview-error" ng-hide="feedbackNote">{{i10n.descriptionError}}</div>
+    </div>
+
+
+    <div id="feedback-submit-success" ng-if="submitSuccess">
+      <div class='feedback-top'>
+        <div class="feedback-logo">{{i10n.title}}</div>
+        <div class="feedback-wizard-close" ng-click='close()'></div>
+      </div>
+      <p>{{i10n.thanks.message1}}</p>
+      <p>{{i10n.thanks.message2}}</p>
+      <button class="feedback-close-btn feedback-btn-blue" ng-click='close()'>{{i10n.okButton}}</button>
+    </div>
+  </div>
+  <canvas id="feedback-canvas" ng-mousemove='onHover($event)' ng-mouseup='selectBlock($event)'
+        ng-mousedown='onMouseDown($event)' ng-mouseleave='redraw()' ng-show='showCanvas'></canvas>
+</div>

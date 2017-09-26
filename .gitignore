@@ -25,3 +25,5 @@ lib
 angular-send-feedback.tpls.js
 bower_components
 .idea
+
+*.swp

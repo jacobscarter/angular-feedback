@@ -1,6 +1,6 @@
 /**
  * Angular feedback directive similar to Google Feedback
- * @version v1.2.2 - 2017-09-17 * @link https://github.com/pepperlabs/angular-feedback
+ * @version v1.2.2 - 2017-09-26 * @link https://github.com/pepperlabs/angular-feedback
  * @author Jacob Carter <jacob@ieksolutions.com>
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -14,7 +14,7 @@ angular.module("angularsendfeedback.html", []).run(["$templateCache", function($
     "    <button class=\"feedback-btn feedback-btn-gray\">{{i10n.initButton}}</button>\n" +
     "  </div>\n" +
     "\n" +
-    "  <div id=\"feedback-module\" ng-show='start'>\n" +
+    "  <div id=\"feedback-module\" ng-if='start'>\n" +
     "    <div id=\"feedback-welcome\" ng-if='showWelcome'>\n" +
     "      <div class='feedback-top'>\n" +
     "        <div class=\"feedback-logo\">{{i10n.title}}</div>\n" +
